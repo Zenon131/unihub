@@ -2,10 +2,9 @@ import {
     useQuery,
     useMutation,
     useQueryClient,
-    useInfiniteQuery
   } from '@tanstack/react-query'
 import { createComment, createPost, createUserAccount, getChildPostCount, getPostById, getPostByParent, getRecentPosts, getUserById, loginAccount, logoutAccount, searchPosts } from '../appwrite/api'
-import { INewComment, INewPost, INewUser, IUpdateUser } from '@/types'
+import { INewComment, INewPost, INewUser } from '@/types'
 import { QUERY_KEYS } from './queryKeys'
 import { appwriteConfig, databases } from '../appwrite/config'
 
