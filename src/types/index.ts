@@ -1,11 +1,12 @@
 export type IContextType = {
   user: IUser;
   isLoading: boolean;
-  setUser: React.Dispatch<React.SetStateAction<IUser>>;
   isAuthenticated: boolean;
+  setUser: React.Dispatch<React.SetStateAction<IUser>>;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   checkAuthUser: () => Promise<boolean>;
-}
+};
+
 
 export type INavLink = {
     imgURL: string;
@@ -29,7 +30,7 @@ export type INavLink = {
     location: string;
     // community: string;
     topic?: string;
-    parentId: string;
+    parentId?: string;
   };
   
   export type IUpdatePost = {
@@ -46,8 +47,8 @@ export type INavLink = {
     id: string;
     username: string;
     email: string;
-    imageUrl: string;
-    bio: string;
+    imgurl?: string;
+    bio?: string;
     // location: string;
   };
   
@@ -66,3 +67,27 @@ export type INavLink = {
     replies?: INewComment[];
     commentId: string;
   }
+
+  export interface ICreator {
+    $id: string;
+    username: string;
+    email: string;
+    imgurl?: string;
+    bio?: string;
+  }
+  
+  export interface IPost {
+    $id: string;
+    $collectionId: string;
+    $databaseId: string;
+    $createdAt: string;
+    $updatedAt: string;
+    $permissions: string[];
+    content: string;
+    location: string;
+    topic: string;
+    userId: string;
+    parentId?: string;
+    creator?: ICreator;
+  }
+  

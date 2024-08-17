@@ -1,7 +1,7 @@
-import { INewComment, INewPost, INewUser, IUpdateUser } from "@/types";
+import { INewComment, INewPost, INewUser } from "@/types";
 import { ID, Query } from 'appwrite';
 import { account, appwriteConfig, avatars, databases } from "./config";
-import { QUERY_KEYS } from "../react-query/queryKeys";
+
 
 export async function createUserAccount(user: INewUser) {
     try {
@@ -23,7 +23,7 @@ export async function createUserAccount(user: INewUser) {
             imgurl: aviURL.toString(),  // Convert URL to string
         });
 
-        return newAcc;
+        return newUser;
     } catch (err) {
         console.error("Error creating user account:", err);
         return err;
@@ -149,18 +149,22 @@ export async function getRecentPosts() {
     return posts
 }
 
-export async function getPostById(postId: string) {
-  const post = await databases.getDocument(
-    appwriteConfig.databaseId,
-    appwriteConfig.postCollectionId,
-    postId
-  );
-  if (!post) throw new Error("Failed to fetch post");
+export async function getPostById(postId?: string) {
+  if (!postId) throw Error;
 
-  // Fetch creator data
-  const creator = await getUserById(post.userId);
+  try {
+    const post = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      postId
+    );
 
-  return { ...post, creator };
+    if (!post) throw Error;
+
+    return post;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 

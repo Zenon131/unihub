@@ -7,7 +7,7 @@ export const INITIAL_USER: IUser = {
     id: '',
     username: '',
     email: '',
-    imageUrl: '',
+    imgurl: '',
     bio: '',
 };
 
@@ -31,32 +31,35 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const checkAuthUser = async () => {
         try {
-            setIsLoading(true);
-            const currentAcc = await getCurrentUser();
-    
-            if (currentAcc) {
-                setUser({
-                    id: currentAcc.$id,
-                    username: currentAcc.username,
-                    email: currentAcc.email,
-                    imageUrl: currentAcc.imageUrl,
-                    bio: currentAcc.bio,
-                });
-    
-                setIsAuthenticated(true);
-                return true;
-            } else {
-                setIsAuthenticated(false);
-                return false;
-            }
-        } catch (err) {
-            console.log(err);
+          setIsLoading(true);
+          const currentAcc = await getCurrentUser();
+      
+          if (currentAcc) {
+            setUser({
+              id: currentAcc.$id,
+              username: currentAcc.username,
+              email: currentAcc.email,
+              imgurl: currentAcc.imgurl,
+              bio: currentAcc.bio,
+            });
+      
+            setIsAuthenticated(true);
+            return true;
+          } else {
+            setUser(INITIAL_USER); // Ensure user is never null
             setIsAuthenticated(false);
             return false;
+          }
+        } catch (err) {
+          console.log(err);
+          setUser(INITIAL_USER); // Ensure user is never null
+          setIsAuthenticated(false);
+          return false;
         } finally {
-            setIsLoading(false);
+          setIsLoading(false);
         }
-    };
+      };
+      
     
     useEffect(() => {
         const cookieFallback = localStorage.getItem('cookieFallback');

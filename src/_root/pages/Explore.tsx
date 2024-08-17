@@ -7,8 +7,6 @@ import Loader from '@/components/shared/Loader';
 const Explore = () => {
   const [searchVal, setSearchVal] = useState('');
   const { data: searchResults, isLoading } = useSearchPosts(searchVal);
-  console.log(searchResults)
-  console.log(searchVal)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => 
     setSearchVal(e.target.value);
@@ -31,17 +29,17 @@ const Explore = () => {
       <div className='flex-between w-full max-w-5xl mt-16 mb-7'>
         <h2 className='h3-bold md:h2-body-bold md:h3-bold'>Results</h2>
       </div>
-        {isLoading ? (
-          <Loader />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        searchResults?.documents?.length ? (
+          searchResults.documents.map((post) => (
+            post && <PostCard key={post.$id} post={post} />
+          ))
         ) : (
-          searchResults?.documents.length ? (
-            searchResults.documents.map((post) => (
-              <PostCard key={post?.$id} post={post} />
-            ))
-          ) : (
-            <p>No posts found.</p>
-          )
-        )}
+          <p>No posts found.</p>
+        )
+      )}
     </div>
   );
 };

@@ -1,11 +1,10 @@
 import { multiFormatDateString } from '@/lib/utils';
 import { Models } from 'appwrite';
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';  // Assuming you have a Button component
 import { useChildPostCount } from '@/lib/react-query/queriesAndMutations';
 import { Badge } from '../ui/badge';
-import { Separator } from '../ui/separator';
+
 
 type PostCardProps = {
   post: Models.Document;

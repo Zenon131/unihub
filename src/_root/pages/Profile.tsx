@@ -7,7 +7,6 @@ import {
   useLocation,
 } from "react-router-dom";
 
-
 import { useUserContext } from "@/context/authContext";
 import Loader from "@/components/shared/Loader";
 import PostCard from "@/components/shared/PostCard";
@@ -15,6 +14,7 @@ import { useGetUserById } from "@/lib/react-query/queriesAndMutations";
 import { multiFormatDateString } from "@/lib/utils";
 import { useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Models } from "appwrite";
 
 interface StatBlockProps {
   value: string | number;
@@ -28,15 +28,28 @@ const StatBlock = ({ value, label }: StatBlockProps) => (
   </div>
 );
 
-// Component to display the frequent topics
-const FrequentTopics = ({ posts }) => {
+// Component to display the frequent topicsimport React, { useMemo } from 'react';
+
+// Define the types for the props (optional but recommended for TypeScript)
+type Post = {
+  topic?: string;
+};
+
+type FrequentTopicsProps = {
+  posts: Post[];
+};
+
+const FrequentTopics: React.FC<FrequentTopicsProps> = ({ posts }) => {
   const topicCounts = useMemo(() => {
-    const counts = {};
+    const counts: Record<string, number> = Object.create(null);
+    
     posts.forEach((post) => {
       if (post.topic) {
         counts[post.topic] = (counts[post.topic] || 0) + 1;
       }
     });
+    
+    // Sort topics by their frequency in descending order
     return Object.entries(counts).sort((a, b) => b[1] - a[1]);
   }, [posts]);
 
@@ -56,6 +69,8 @@ const FrequentTopics = ({ posts }) => {
     </div>
   );
 };
+
+
 
 const Profile = () => {
   const { id } = useParams();
@@ -87,7 +102,7 @@ const Profile = () => {
           <div className="flex flex-col flex-1 justify-between md:mt-2">
             <div className="flex flex-col w-full">
               <h1 className="text-center xl:text-left h3-bold md:h1-semibold w-full">
-                {currentUser.name}
+                {currentUser.username}
               </h1>
               <p className="small-regular md:body-medium text-light-3 text-center xl:text-left">
                 @{currentUser.username}
@@ -176,7 +191,7 @@ const Profile = () => {
         <Route
           index
           element={currentUser.posts.length > 0 ? (
-            currentUser.posts.map((post) => (
+            currentUser.posts.map((post: Models.Document) => (
               <PostCard
                 key={post.$id}
                 post={{

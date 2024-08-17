@@ -122,10 +122,12 @@ export const useGetPopularTopics = () => {
         appwriteConfig.postCollectionId,
         []
       );
+
       // Assuming your posts have a 'topic' field
-      const topics = response.documents.reduce((acc, post) => {
+      const topics = response.documents.reduce<Record<string, number>>((acc, post) => {
         if (post.topic) {
-          acc[post.topic] = (acc[post.topic] || 0) + 1;
+          const topic = post.topic as string; // Ensure that topic is a string
+          acc[topic] = (acc[topic] || 0) + 1;
         }
         return acc;
       }, {});

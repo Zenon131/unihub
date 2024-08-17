@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Link, useParams } from 'react-router-dom';
 import CommentForm from '@/components/forms/CommentForm';
 import Loader from '@/components/shared/Loader';

@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { useLogoutAccMutation } from '@/lib/react-query/queriesAndMutations';
 import { useUserContext } from '@/context/authContext';
-import { getCurrentUser } from '@/lib/appwrite/api';
+
 
 const Topbar = () => {
     const { mutate: logout, isSuccess } = useLogoutAccMutation();
     const { user } = useUserContext();
     const navigate = useNavigate();
     
-    const [currentUser, setCurrentUser] = useState(null);
+    // const [currentUser, setCurrentUser] = useState(null);
 
-    useEffect(() => {
-        const fetchCurrentUser = async () => {
-            const user = await getCurrentUser();
-            setCurrentUser(user);
-        };
-        fetchCurrentUser();
-    }, []);
+    // useEffect(() => {
+    //     const fetchCurrentUser = async () => {
+    //         const user = await getCurrentUser();
+    //         setCurrentUser(user);
+    //     };
+    //     fetchCurrentUser();
+    // }, []);
 
     useEffect(() => {
         if (isSuccess) {
@@ -36,10 +36,10 @@ const Topbar = () => {
                     <Button variant="ghost" className="shad-button_ghost" onClick={() => logout()}>
                         <img src="/assets/icons/box-arrow-left.svg" className="invert-white" width={24} alt="logout" />
                     </Button>
-                    {currentUser && (
+                    {user && (
                         <Link to={`/profile/${user.id}`} className="flex-center gap-3">
                             <img
-                                src={currentUser.imgurl || '/assets/icons/profile-placeholder.svg'}
+                                src={user.imgurl || '/assets/icons/profile-placeholder.svg'}
                                 alt="profile"
                                 className="h-8 w-8 rounded-full"
                             />

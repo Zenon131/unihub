@@ -1,11 +1,11 @@
 import { sidebarLinks } from '@/constants'
 import { useUserContext } from '@/context/authContext'
 import { useLogoutAccMutation } from '@/lib/react-query/queriesAndMutations'
-import { INavLink } from '@/types'
-import  { useState, useEffect } from 'react'
+import { INavLink  } from '@/types'
+import  { useEffect } from 'react'
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '../ui/button'
-import { getCurrentUser } from '@/lib/appwrite/api'
+// import { getCurrentUser } from '@/lib/appwrite/api'
 
 const LeftSidebar = () => {
     const { mutate: logout, isSuccess } = useLogoutAccMutation()
@@ -13,15 +13,17 @@ const LeftSidebar = () => {
     const { pathname } = useLocation()
     const navigate = useNavigate()
 
-    const [currentUser, setCurrentUser] = useState(null)
 
-    useEffect(() => {
-        const fetchCurrentUser = async () => {
-            const user = await getCurrentUser()
-            setCurrentUser(user)
-        }
-        fetchCurrentUser()
-    }, [])
+    // const [currentUser, setCurrentUser] = useState<IUser | null>(null)
+
+    // useEffect(() => {
+    //     const fetchCurrentUser = async () => {
+    //         const user = await getCurrentUser()
+
+    //         setCurrentUser(user)
+    //     }
+    //     fetchCurrentUser()
+    // }, [])
 
     useEffect(() => {
         if (isSuccess) {
@@ -50,12 +52,12 @@ const LeftSidebar = () => {
                 </ul>
             </div>
             <div className='flex flex-col gap-6'>
-                {currentUser && (
-                        <Link to={`/profile/${user.id}`} className='flex gap-3 items-center'>
-                            <img src={currentUser.imgurl || '/assets/icons/profile-placeholder.svg'} alt='profile' className='h-14 w-14 rounded-full'/>
+                {user && (
+                        <Link to={`/profile/${user?.id}`} className='flex gap-3 items-center'>
+                            <img src={user?.imgurl || '/assets/icons/profile-placeholder.svg'} alt='profile' className='h-14 w-14 rounded-full'/>
                             <div className='flex flex-col'>
-                                <p className='body-bold'>{currentUser.username}</p>
-                                <p className='small-regular text-light-4'>@{currentUser.username}</p>
+                                <p className='body-bold'>{user?.username}</p>
+                                <p className='small-regular text-light-4'>@{user?.username}</p>
                             </div>
                         </Link>
                     )}
