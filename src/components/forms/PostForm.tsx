@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,6 +18,7 @@ import { useUserContext } from "@/context/authContext"
 import { useToast } from "../ui/use-toast"
 import { useNavigate } from "react-router-dom"
 import { useCreatePost } from "@/lib/react-query/queriesAndMutations"
+import Loader from "../shared/Loader"
 
 type PostFormProps = {
   post?: Models.Document
@@ -114,7 +114,11 @@ const PostForm = ({ post }: PostFormProps) => {
         />
         {/* <div className="flex gap-4 items-center justify-center"> */}
             <Button type="button" className="shad-button_dark_4">Cancel</Button>
-            <Button type="submit" className="shad-button_primary">Post</Button>
+            <Button type="submit" className="shad-button_primary">
+              {isLoadingCreate ? (
+                <Loader />
+              ) : "Post"}
+            </Button>
             {/* <Button type="submit" className="shad-button_primary whitespace-nowrap">Post</Button> */}
         {/* </div> */}
       </form>
