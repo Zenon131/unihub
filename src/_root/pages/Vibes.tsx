@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetPopularTopics } from '@/lib/react-query/queriesAndMutations';
-import { summarizeContent, getSummaryForTopic } from '@/lib/utils';
+import { getSummaryForTopic } from '@/lib/utils';
 
 const Vibes = () => {
   const { data: topics, isPending: isTopicLoading, isError: isErrorTopics } = useGetPopularTopics();
