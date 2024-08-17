@@ -3,12 +3,12 @@ import PostCard from '@/components/shared/PostCard'
 import TopicCard from '@/components/shared/TopicCard'
 import { useGetRecentPosts, useGetPopularTopics } from '@/lib/react-query/queriesAndMutations'
 import { Models } from 'appwrite'
-import React from 'react'
+
 
 const Home = () => {
-  const { data: posts, isPending: isPostLoading, isError: isErrorPosts } = useGetRecentPosts()
+  const { data: posts, isPending: isPostLoading } = useGetRecentPosts()
 
-  const { data: topics, isPending: isTopicLoading, isError: isErrorTopics } = useGetPopularTopics()
+  const { data: topics, isPending: isTopicLoading } = useGetPopularTopics()
 
   return (
     <div className='flex flex-1'>

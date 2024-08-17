@@ -26,14 +26,14 @@ const PostDetails = () => {
             <div className="flex items-center gap-3">
               <Link to={`/profile/${post.userId}`}>
                 <img
-                  src={post.creator.imgurl || 'assets/icons/profile-placeholder.svg'}
+                  src={post.creator?.imgurl || 'assets/icons/profile-placeholder.svg'}
                   alt="creator"
                   className="w-10 h-10 rounded-full object-cover"
                 />
               </Link>
               <div className="flex flex-col">
                 <p className="base-medium lg:body-bold text-light-1">
-                  {post.creator.username || 'Unknown User'}
+                  {post.creator?.username || 'Unknown User'}
                 </p>
                 <div className="flex-center gap-2 text-light-3">
                   <p className="subtle-semibold lg:small-regular">
