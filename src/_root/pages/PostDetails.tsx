@@ -12,6 +12,7 @@ const PostDetails = () => {
   const { id } = useParams();
   const { data: post, isPending: isPostLoading } = useGetPostById(id || '');
   const { data: comments, isPending: isCommentsLoading } = useGetPostsByParent(id || '');
+  const { data: parentPost, isLoading: isParentPostLoading } = useGetPostById(post?.parentId || '');
 
   if (isPostLoading) {
     return <Loader />;
@@ -58,7 +59,7 @@ const PostDetails = () => {
             <div className="mt-4">
               <Link to={`/post/${post.parentId}`}>
                 <Button className="shad-button_primary">
-                  View Parent Post
+                  Replied to {isParentPostLoading ? 'Loading...' : parentPost?.creator.username || 'Unknown Post'}
                 </Button>
               </Link>
             </div>
