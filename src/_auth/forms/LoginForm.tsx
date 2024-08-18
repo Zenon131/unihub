@@ -77,6 +77,7 @@ function LoginForm() {
       toast({
         title: 'Something went wrong',
         variant: 'destructive',
+        className: 'toast-error',
       });
     }
   }

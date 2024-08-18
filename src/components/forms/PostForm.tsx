@@ -61,10 +61,12 @@ const PostForm = ({ post }: PostFormProps) => {
       toast({
         title: "Error creating post",
         variant: "destructive",
+        className: 'toast-error',
       })
     } else {
       toast({
         title: "Post created successfully!",
+        className: 'toast-primary',
       })
       navigate('/')
     }

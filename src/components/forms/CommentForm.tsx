@@ -43,6 +43,7 @@ const CommentForm = ({ postId }: CommentFormProps) => {
       toast({
         title: "Error fetching parent post details",
         variant: "destructive",
+        className: 'toast-error',
       });
       return;
     }
@@ -60,10 +61,12 @@ const CommentForm = ({ postId }: CommentFormProps) => {
       toast({
         title: "Error creating post",
         variant: "destructive",
+        className: 'toast-error',
       });
     } else {
       toast({
         title: "Comment posted successfully!",
+        className: 'toast-primary',
       });
       navigate(0);
     }

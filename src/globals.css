@@ -240,6 +240,15 @@
     @apply sticky top-0 z-50 md:hidden bg-dark-2 w-full;
   }
 
+  /* Toast */
+  .toast-primary {
+    @apply bg-white text-light-1;
+  }
+
+  .toast-error {
+    @apply bg-red text-light-1;
+  }
+
   /* User card */
   .user-card {
     @apply flex-center flex-col gap-4 border border-dark-4 rounded-[20px] px-5 py-8;
