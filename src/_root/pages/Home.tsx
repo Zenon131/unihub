@@ -1,3 +1,4 @@
+import FAB from '@/components/shared/FAB'
 import Loader from '@/components/shared/Loader'
 import PostCard from '@/components/shared/PostCard'
 import TopicCard from '@/components/shared/TopicCard'
@@ -9,6 +10,7 @@ const Home = () => {
   const { data: posts, isPending: isPostLoading } = useGetRecentPosts()
 
   const { data: topics, isPending: isTopicLoading } = useGetPopularTopics()
+
 
   return (
     <div className='flex flex-1'>
@@ -26,6 +28,7 @@ const Home = () => {
           }
         </div>
       </div>
+      <FAB destination={'/create-post'} />
       <div className="home-creators">
         <div className='flex gap-2'>
           <h3 className="h3-bold text-light-1">Hot Topics</h3>

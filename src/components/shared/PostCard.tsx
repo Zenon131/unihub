@@ -2,7 +2,7 @@ import { multiFormatDateString } from '@/lib/utils';
 import { Models } from 'appwrite';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';  // Assuming you have a Button component
-import { useChildPostCount } from '@/lib/react-query/queriesAndMutations';
+import { useChildPostCount, useGetPostById } from '@/lib/react-query/queriesAndMutations';
 import { Badge } from '../ui/badge';
 
 
@@ -14,6 +14,7 @@ type PostCardProps = {
 const PostCard = ({ post }: PostCardProps) => {
   console.log(post)
   const { data: childPostCount, isLoading } = useChildPostCount(post.$id);
+  const { data: parentPost, isLoading: isParentPostLoading } = useGetPostById(post.parentId || '');
   return (
     <div className="post-card mb-6">
       {/* Breadcrumb Navigation */}
@@ -77,7 +78,7 @@ const PostCard = ({ post }: PostCardProps) => {
         <div className="mt-4">
           <Link to={`/post/${post.parentId}`}>
             <Button className="shad-button_primary">
-              View Parent Post
+              Replied to {isParentPostLoading ? 'Loading...' : parentPost?.creator.username || 'Unknown Post'}
             </Button>
           </Link>
         </div>

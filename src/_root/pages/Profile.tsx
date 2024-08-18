@@ -28,9 +28,7 @@ const StatBlock = ({ value, label }: StatBlockProps) => (
   </div>
 );
 
-// Component to display the frequent topicsimport React, { useMemo } from 'react';
-
-// Define the types for the props (optional but recommended for TypeScript)
+// Define the types for the props
 type Post = {
   topic?: string;
 };
@@ -70,8 +68,6 @@ const FrequentTopics: React.FC<FrequentTopicsProps> = ({ posts }) => {
   );
 };
 
-
-
 const Profile = () => {
   const { id } = useParams();
   const { user } = useUserContext();
@@ -85,6 +81,13 @@ const Profile = () => {
         <Loader />
       </div>
     );
+
+  // Check if currentUser and currentUser.posts exist before sorting
+  const sortedPosts = currentUser.posts
+    ? [...currentUser.posts].sort((a, b) => {
+        return new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime();
+      })
+    : [];
 
   const isCurrentUserProfile = user?.id === currentUser.$id;
 
@@ -177,11 +180,10 @@ const Profile = () => {
           }`}
         >
           <img
-            src="/assets/icons/exclamation-square.svg"
+            src="/assets/icons/!.svg"
             alt="topics"
             width={20}
             height={20}
-            className="invert"
           />
           Frequent Topics
         </Link>
@@ -190,23 +192,28 @@ const Profile = () => {
       <Routes>
         <Route
           index
-          element={currentUser.posts.length > 0 ? (
-            currentUser.posts.map((post: Models.Document) => (
-              <PostCard
-                key={post.$id}
-                post={{
-                  ...post,
-                  creator: { username: currentUser.username, imgurl: currentUser.imgurl },
-                }}
-              />
-            ))
-          ) : (
-            <p>No posts yet.</p>
-          )}
+          element={
+            sortedPosts.length > 0 ? (
+              sortedPosts.map((post: Models.Document) => (
+                <PostCard
+                  key={post.$id}
+                  post={{
+                    ...post,
+                    creator: {
+                      username: currentUser.username,
+                      imgurl: currentUser.imgurl,
+                    },
+                  }}
+                />
+              ))
+            ) : (
+              <p>No posts yet.</p>
+            )
+          }
         />
         <Route
           path="topics"
-          element={<FrequentTopics posts={currentUser.posts} />}
+          element={<FrequentTopics posts={sortedPosts} />}
         />
       </Routes>
       <Outlet />
