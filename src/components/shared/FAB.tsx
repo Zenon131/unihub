@@ -14,7 +14,7 @@ interface FABProps {
         )}
       >
         
-        <img src='/assets/icons/pencil-square.svg' alt='create' className='invert' width={30}/>
+        <img src='/assets/icons/pencil-square.svg' alt='create' className='invert' width={24}/>
       </Link>
     );
   };
