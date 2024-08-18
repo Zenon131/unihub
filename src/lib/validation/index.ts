@@ -24,3 +24,10 @@ export const PostValidation = z.object({
 export const CommentValidation = z.object({
   content: z.string().min(1, "Content is required").max(100, "Too many characters"),
 })
+
+
+
+export const ProfileValidation = z.object({
+  username: z.string().min(1, "Username is required"),
+  file: z.custom<File[]>(),
+})

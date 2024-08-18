@@ -1,6 +1,6 @@
-import { INewComment, INewPost, INewUser } from "@/types";
+import { INewComment, INewPost, INewUser, IUpdateUser } from "@/types";
 import { ID, Query } from 'appwrite';
-import { account, appwriteConfig, avatars, databases } from "./config";
+import { account, appwriteConfig, avatars, databases, storage } from "./config";
 
 
 export async function createUserAccount(user: INewUser) {
@@ -297,62 +297,107 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
     }
   }
 
-// export async function updateUser(user: IUpdateUser) {
-//     const hasFileToUpdate = user.file.length > 0;
-//     try {
-//       let image = {
-//         imageUrl: user.imageUrl,
-//         imageId: user.imageId,
-//       };
+  export async function uploadFile(file: File) {
+    try {
+      const uploadedFile = await storage.createFile(
+        appwriteConfig.storageId,
+        ID.unique(),
+        file
+      );
   
-//       if (hasFileToUpdate) {
-//         // Upload new file to appwrite storage
-//         const uploadedFile = await uploadFile(user.file[0]);
-//         if (!uploadedFile) throw Error;
+      return uploadedFile;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   
-//         // Get new file url
-//         const fileUrl = getFilePreview(uploadedFile.$id);
-//         if (!fileUrl) {
-//           await deleteFile(uploadedFile.$id);
-//           throw Error;
-//         }
+  // ============================== GET FILE URL
+  export function getFilePreview(fileId: string) {
+    try {
+      const fileUrl = storage.getFilePreview(
+        appwriteConfig.storageId,
+        fileId,
+        2000,
+        2000,
+        undefined,
+        100
+      );
   
-//         image = { ...image, imageUrl: fileUrl, imageId: uploadedFile.$id };
-//       }
+      if (!fileUrl) throw Error;
   
-//       //  Update user
-//       const updatedUser = await databases.updateDocument(
-//         appwriteConfig.databaseId,
-//         appwriteConfig.userCollectionId,
-//         user.userId,
-//         {
-//           name: user.username,
-//           bio: user.bio,
-//           imageUrl: image.imageUrl,
-//           imageId: image.imageId,
-//         }
-//       );
+      return fileUrl;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   
-//       // Failed to update
-//       if (!updatedUser) {
-//         // Delete new file that has been recently uploaded
-//         if (hasFileToUpdate) {
-//           await deleteFile(image.imageId);
-//         }
-//         // If no new file uploaded, just throw error
-//         throw Error;
-//       }
+  // ============================== DELETE FILE
+  export async function deleteFile(fileId: string) {
+    try {
+      await storage.deleteFile(appwriteConfig.storageId, fileId);
   
-//       // Safely delete old file after successful update
-//       if (user.imageId && hasFileToUpdate) {
-//         await deleteFile(user.imageId);
-//       }
+      return { status: "ok" };
+    } catch (error) {
+      console.log(error);
+    }
+  }
   
-//       return updatedUser;
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
+
+export async function updateUser(user: IUpdateUser) {
+    const hasFileToUpdate = user.file.length > 0;
+    try {
+      let image = {
+        imgurl: user.imgurl,
+        imgid: user.imgid,
+      };
+  
+      if (hasFileToUpdate) {
+        // Upload new file to appwrite storage
+        const uploadedFile = await uploadFile(user.file[0]);
+        if (!uploadedFile) throw Error;
+  
+        // Get new file url
+        const fileUrl = getFilePreview(uploadedFile.$id);
+        if (!fileUrl) {
+          await deleteFile(uploadedFile.$id);
+          throw Error;
+        }
+  
+        image = { ...image, imgurl: fileUrl, imgid: uploadedFile.$id };
+      }
+  
+      //  Update user
+      const updatedUser = await databases.updateDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        user.userId,
+        {
+          username: user.username,
+          imgurl: image.imgurl,
+          imgid: image.imgid,
+        }
+      );
+  
+      // Failed to update
+      if (!updatedUser) {
+        // Delete new file that has been recently uploaded
+        if (hasFileToUpdate) {
+          await deleteFile(image.imgid);
+        }
+        // If no new file uploaded, just throw error
+        throw Error;
+      }
+  
+      // Safely delete old file after successful update
+      if (user.imgid && hasFileToUpdate) {
+        await deleteFile(user.imgid);
+      }
+  
+      return updatedUser;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
 export async function getUserById(userId: string) {
     try {

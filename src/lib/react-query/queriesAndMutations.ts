@@ -3,8 +3,8 @@ import {
     useMutation,
     useQueryClient,
   } from '@tanstack/react-query'
-import { createComment, createPost, createUserAccount, getChildPostCount, getPostById, getPostByParent, getRecentPosts, getUserById, loginAccount, logoutAccount, searchPosts } from '../appwrite/api'
-import { INewComment, INewPost, INewUser } from '@/types'
+import { createComment, createPost, createUserAccount, getChildPostCount, getPostById, getPostByParent, getRecentPosts, getUserById, loginAccount, logoutAccount, searchPosts, updateUser } from '../appwrite/api'
+import { INewComment, INewPost, INewUser, IUpdateUser } from '@/types'
 import { QUERY_KEYS } from './queryKeys'
 import { appwriteConfig, databases } from '../appwrite/config'
 
@@ -97,20 +97,20 @@ export const useGetUserById = (userId: string) => {
   });
 };
 
-// export const useUpdateUser = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation({
-//     mutationFn: (user: IUpdateUser) => updateUser(user),
-//     onSuccess: (data) => {
-//       queryClient.invalidateQueries({
-//         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
-//       });
-//       queryClient.invalidateQueries({
-//         queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id],
-//       });
-//     },
-//   });
-// };
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (user: IUpdateUser) => updateUser(user),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id],
+      });
+    },
+  });
+};
 
 export const useGetPopularTopics = () => {
   return useQuery({

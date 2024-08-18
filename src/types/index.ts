@@ -17,9 +17,8 @@ export type INavLink = {
   export type IUpdateUser = {
     userId: string;
     username: string;
-    bio: string;
-    imageId: string;
-    imageUrl: URL | string;
+    imgid: string;
+    imgurl: URL | string;
     file: File[];
     // location: string;
   };
@@ -90,4 +89,6 @@ export type INavLink = {
     parentId?: string;
     creator?: ICreator;
   }
+
+
   
