@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useGetPopularTopics } from '@/lib/react-query/queriesAndMutations';
 import { getSummaryForTopic } from '@/lib/utils';
 
-const Vibes = () => {
+const Harmony = () => {
   const { data: topics, isPending: isTopicLoading, isError: isErrorTopics } = useGetPopularTopics();
   const [summaries, setSummaries] = useState<{ [key: string]: string }>({});
   const [loadingSummaries, setLoadingSummaries] = useState<boolean>(true);
@@ -68,4 +68,4 @@ const Vibes = () => {
   );
 };
 
-export default Vibes;
+export default Harmony;

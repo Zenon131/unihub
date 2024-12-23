@@ -7,7 +7,7 @@ import AuthLayout from './_auth/AuthLayout'
 import RootLayout from './_root/RootLayout'
 import { Toaster } from './components/ui/toaster'
 import PostDetails from './_root/pages/PostDetails'
-import Vibes from './_root/pages/Vibes'
+import Vibes from './_root/pages/Harmony'
 
 
 
