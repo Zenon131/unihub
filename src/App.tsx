@@ -1,7 +1,7 @@
 import { Routes, Route} from 'react-router-dom'
 import './globals.css'
 import LoginForm from './_auth/forms/LoginForm'
-import { Community, CreateCommunity, CreatePost, Explore, Home, Profile, UpdateProfile } from './_root/pages'
+import { CreatePost, Explore, Home, Profile, UpdateProfile } from './_root/pages'
 import RegForm from './_auth/forms/RegForm'
 import AuthLayout from './_auth/AuthLayout'
 import RootLayout from './_root/RootLayout'
@@ -27,9 +27,9 @@ function App() {
         <Route element={<RootLayout />}>
             <Route index element={<Home />} />
             <Route path="/explore" element={<Explore />} />
-            <Route path="/create-community" element={<CreateCommunity />} />
+            {/* <Route path="/create-community" element={<CreateCommunity />} /> */}
             <Route path="/create-post" element={<CreatePost />} />
-            <Route path="/community/:id" element={<Community />} />
+            {/* <Route path="/community/:id" element={<Community />} /> */}
             <Route path="/post/:id" element={<PostDetails />} />
             <Route path="/profile/:id/*" element={<Profile />} />
             <Route path="/update-profile/:id/" element={<UpdateProfile />} />
