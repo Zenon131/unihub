@@ -7,6 +7,7 @@ import { createComment, createPost, createUserAccount, getChildPostCount, getPos
 import { INewComment, INewPost, INewUser, IUpdateUser } from '@/types'
 import { QUERY_KEYS } from './queryKeys'
 import { appwriteConfig, databases } from '../appwrite/config'
+import { Query } from 'appwrite';
 
 export function useCreateUserAccMutation() {
     return useMutation({
@@ -50,12 +51,30 @@ export const useCreateComment = () => {
     });
 }
 
-export const useGetRecentPosts = () => {
+export const useGetRecentPosts = (topic?: string, location?: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
-    queryFn: () => getRecentPosts(),
-  })
-}
+    queryKey: [QUERY_KEYS.GET_RECENT_POSTS, topic, location],
+    queryFn: async () => {
+      const queries: any[] = [];
+
+      if (topic) {
+        queries.push(Query.equal('topic', topic));
+      }
+      
+      if (location) {
+        queries.push(Query.equal('location', location));
+      }
+
+      const response = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.postCollectionId,
+        queries.length > 0 ? queries : []
+      );
+
+      return response;
+    },
+  });
+};
 
 export const useGetPostById = (postId: string) => {
   return useQuery({
@@ -122,17 +141,31 @@ export const useGetPopularTopics = () => {
         []
       );
 
-      // Assuming your posts have a 'topic' field
-      const topics = response.documents.reduce<Record<string, number>>((acc, post) => {
+      // Create a case-insensitive map of topics
+      const topicMap = new Map<string, { name: string; count: number }>();
+      
+      response.documents.forEach(post => {
         if (post.topic) {
-          const topic = post.topic as string; // Ensure that topic is a string
-          acc[topic] = (acc[topic] || 0) + 1;
+          const topicLower = post.topic.toLowerCase();
+          const existing = topicMap.get(topicLower);
+          
+          if (!existing || post.topic.length > existing.name.length) {
+            // Keep the longest version of the topic name (usually the properly capitalized one)
+            topicMap.set(topicLower, {
+              name: post.topic,
+              count: (existing?.count || 0) + 1
+            });
+          } else {
+            topicMap.set(topicLower, {
+              name: existing.name,
+              count: existing.count + 1
+            });
+          }
         }
-        return acc;
-      }, {});
+      });
 
-      return Object.entries(topics)
-        .map(([name, postCount]) => ({ name, postCount }))
+      return Array.from(topicMap.values())
+        .map(({ name, count }) => ({ name, postCount: count }))
         .sort((a, b) => b.postCount - a.postCount);
     },
   });

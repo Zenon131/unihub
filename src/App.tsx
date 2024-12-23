@@ -33,8 +33,7 @@ function App() {
             <Route path="/post/:id" element={<PostDetails />} />
             <Route path="/profile/:id/*" element={<Profile />} />
             <Route path="/update-profile/:id/" element={<UpdateProfile />} />
-            <Route path="/vibes" element={<Vibes />} />
-
+            <Route path="/harmony" element={<Vibes />} />
         </Route>
         
         {/* Catch-all route for handling 404 errors */}

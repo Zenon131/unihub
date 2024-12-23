@@ -42,12 +42,23 @@ const Vibes = () => {
             <p>Error loading topic</p>
           ) : (
             topics.map((topic) => (
-              <div key={topic.name} className="flex flex-col mb-4">
-                <div className='flex gap-0'>
-                    <h3 className="body-bold">{topic.name}</h3>
-                    <img src='/assets/icons/!.svg' alt='popular' height={24} width={24}/>
+              <div 
+                key={topic.name} 
+                className="flex flex-col mb-6 bg-dark-2 rounded-xl p-6 hover:bg-dark-4 transition-all duration-200"
+              >
+                <div className='flex items-center gap-2 mb-3'>
+                    <h3 className="h3-bold text-light-1">{topic.name}</h3>
+                    <img 
+                      src='/assets/icons/!.svg' 
+                      alt='popular' 
+                      height={24} 
+                      width={24}
+                      className="opacity-80"
+                    />
                 </div>
-                <p>{loadingSummaries ? "Loading summary..." : summaries[topic.name]}</p>
+                <p className="text-light-2 base-regular">
+                  {loadingSummaries ? "Loading summary..." : summaries[topic.name]}
+                </p>
               </div>
             ))
           )}

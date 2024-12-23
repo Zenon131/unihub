@@ -21,8 +21,8 @@ export const sidebarLinks = [
     // },
     {
       imgURL: "/assets/icons/stars.svg",
-      route: "/vibes",
-      label: "Vibes",
+      route: "/harmony",
+      label: "Harmony",
     },
     {
       imgURL: "/assets/icons/pencil-square.svg",
@@ -49,8 +49,8 @@ export const sidebarLinks = [
     },
     {
       imgURL: "/assets/icons/stars.svg",
-      route: "/vibes",
-      label: "Vibes",
+      route: "/harmony",
+      label: "Harmony",
     },
     // {
     //   imgURL: "/assets/icons/diagram-2-fill.svg",

@@ -12,6 +12,7 @@ export async function createUserAccount(user: INewUser) {
             user.username,
         );
 
+
         if (!newAcc) throw new Error("Account creation failed");
 
         const aviURL = avatars.getInitials(user.username);
@@ -23,12 +24,14 @@ export async function createUserAccount(user: INewUser) {
             imgurl: aviURL.toString(),  // Convert URL to string
         });
 
+
         return newUser;
     } catch (err) {
         console.error("Error creating user account:", err);
         return err;
     }
 }
+
 
 export async function saveUserToDB(user: {
     email: string;
@@ -51,6 +54,7 @@ export async function saveUserToDB(user: {
             }
         );
 
+
         return newUser;
     } catch (err) {
         console.error("Error saving user to database:", err);
@@ -64,10 +68,12 @@ export async function loginAccount(user: { email: string; password: string; }) {
         // Check if there is an existing session
         const currentSession = await account.getSession('current').catch(() => null);
 
+
         if (currentSession) {
             // Optionally log out or delete the current session
             await account.deleteSession(currentSession.$id);
         }
+
 
         // Now create a new session
         const session = await account.createEmailPasswordSession(user.email, user.password);
@@ -83,6 +89,7 @@ export async function getCurrentUser() {
     try {
         const currentAcc = await account.get();
 
+
         if (!currentAcc) throw new Error("Failed to retrieve current account");
 
         const currentUser = await databases.listDocuments(
@@ -90,6 +97,7 @@ export async function getCurrentUser() {
             appwriteConfig.userCollectionId,
             [Query.equal('accountId', currentAcc.$id)]  // Use the correct query filter
         );
+
 
         if (currentUser.documents.length === 0) throw new Error("No user found with this accountId");
 
@@ -100,6 +108,7 @@ export async function getCurrentUser() {
     }
 }
 
+
 export async function logoutAccount() {
     try {
         const session = await account.deleteSession('current');
@@ -109,6 +118,7 @@ export async function logoutAccount() {
         return err;
     }
 }
+
 
 export async function createPost(post: INewPost) {
     try {
@@ -125,6 +135,7 @@ export async function createPost(post: INewPost) {
                 parentId: post.parentId || null, // Add parent_post for threading if needed
             }
         );
+
 
         return newPost;
     } catch (err: any) {
@@ -148,6 +159,7 @@ export async function getRecentPosts() {
 
     return posts
 }
+
 
 export async function getPostById(postId?: string) {
   if (!postId) throw Error;
@@ -190,6 +202,7 @@ export async function createComment(comment: INewComment) {
     }
 }
 
+
 export async function getPostByParent(postId: string) {
   const posts = await databases.listDocuments(
     appwriteConfig.databaseId,
@@ -228,6 +241,7 @@ export async function getPostByParent(postId: string) {
     }
 }
 
+
 export const searchPosts = async (searchVal: string) => {
     try {
       const locationResponse = await databases.listDocuments(
@@ -238,7 +252,7 @@ export const searchPosts = async (searchVal: string) => {
           Query.limit(20)
         ]
       );
-  
+
       const topicResponse = await databases.listDocuments(
         appwriteConfig.databaseId,
         appwriteConfig.postCollectionId,
@@ -247,7 +261,7 @@ export const searchPosts = async (searchVal: string) => {
           Query.limit(20)
         ]
       );
-  
+
       const contentResponse = await databases.listDocuments(
         appwriteConfig.databaseId,
         appwriteConfig.postCollectionId,
@@ -256,18 +270,18 @@ export const searchPosts = async (searchVal: string) => {
           Query.limit(20)
         ]
       );
-  
+
       // Combine the results, ensuring no duplicates
       const combinedResults = [
         ...locationResponse.documents,
         ...topicResponse.documents,
         ...contentResponse.documents,
       ];
-  
+
       // Remove duplicates based on the document ID
       const uniqueResults = Array.from(new Set(combinedResults.map(doc => doc.$id)))
         .map(id => combinedResults.find(doc => doc.$id === id));
-  
+
       return { total: uniqueResults.length, documents: uniqueResults };
     } catch (error) {
       console.error("Error searching posts:", error);
@@ -275,22 +289,23 @@ export const searchPosts = async (searchVal: string) => {
     }
   };
 
+
 export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
     const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(9)];
-  
+
     if (pageParam) {
       queries.push(Query.cursorAfter(pageParam.toString()));
     }
-  
+
     try {
       const posts = await databases.listDocuments(
         appwriteConfig.databaseId,
         appwriteConfig.postCollectionId,
         queries
       );
-  
+
       if (!posts) throw Error;
-  
+
       return posts;
     } catch (error) {
       console.log(error);
@@ -304,7 +319,7 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
         ID.unique(),
         file
       );
-  
+
       return uploadedFile;
     } catch (error) {
       console.log(error);
@@ -322,9 +337,9 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
         undefined,
         100
       );
-  
+
       if (!fileUrl) throw Error;
-  
+
       return fileUrl;
     } catch (error) {
       console.log(error);
@@ -335,7 +350,7 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
   export async function deleteFile(fileId: string) {
     try {
       await storage.deleteFile(appwriteConfig.storageId, fileId);
-  
+
       return { status: "ok" };
     } catch (error) {
       console.log(error);
@@ -350,22 +365,22 @@ export async function updateUser(user: IUpdateUser) {
         imgurl: user.imgurl,
         imgid: user.imgid,
       };
-  
+
       if (hasFileToUpdate) {
         // Upload new file to appwrite storage
         const uploadedFile = await uploadFile(user.file[0]);
         if (!uploadedFile) throw Error;
-  
+
         // Get new file url
         const fileUrl = getFilePreview(uploadedFile.$id);
         if (!fileUrl) {
           await deleteFile(uploadedFile.$id);
           throw Error;
         }
-  
+
         image = { ...image, imgurl: fileUrl, imgid: uploadedFile.$id };
       }
-  
+
       //  Update user
       const updatedUser = await databases.updateDocument(
         appwriteConfig.databaseId,
@@ -377,7 +392,7 @@ export async function updateUser(user: IUpdateUser) {
           imgid: image.imgid,
         }
       );
-  
+
       // Failed to update
       if (!updatedUser) {
         // Delete new file that has been recently uploaded
@@ -387,12 +402,12 @@ export async function updateUser(user: IUpdateUser) {
         // If no new file uploaded, just throw error
         throw Error;
       }
-  
+
       // Safely delete old file after successful update
       if (user.imgid && hasFileToUpdate) {
         await deleteFile(user.imgid);
       }
-  
+
       return updatedUser;
     } catch (error) {
       console.log(error);
@@ -406,9 +421,9 @@ export async function getUserById(userId: string) {
         appwriteConfig.userCollectionId,
         userId
       );
-  
+
       if (!user) throw Error;
-  
+
       return user;
     } catch (error) {
       console.log(error);
@@ -422,7 +437,7 @@ export async function getUserById(userId: string) {
         appwriteConfig.postCollectionId,
         [Query.equal('topic', topic)]
       );
-  
+
       return posts.documents;
     } catch (error) {
       console.error("Error fetching posts by topic:", error);
@@ -433,4 +448,108 @@ export async function getUserById(userId: string) {
   export const extractContentFromPosts = (posts: any[]) => {
     return posts.map(post => post.content).join(' ');
   }
-  
+
+// ============================== CHAT ROOMS ==============================
+export async function getChatRooms() {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) throw Error;
+
+    const rooms = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.chatRoomsCollectionId,
+      [
+        Query.search('participants', currentUser.$id),
+        Query.orderDesc('$updatedAt'),
+      ]
+    );
+
+    return rooms;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function createChatRoom(name: string, participants: string[]) {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) throw Error;
+
+    // Include current user in participants if not already included
+    if (!participants.includes(currentUser.$id)) {
+      participants.push(currentUser.$id);
+    }
+
+    const newRoom = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.chatRoomsCollectionId,
+      ID.unique(),
+      {
+        name,
+        participants,
+        createdBy: currentUser.$id,
+      }
+    );
+
+    return newRoom;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+// ============================== MESSAGES ==============================
+export async function getChatMessages(roomId: string, limit: number = 50) {
+  try {
+    const messages = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.messagesCollectionId,
+      [
+        Query.equal('roomId', roomId),
+        Query.orderDesc('$createdAt'),
+        Query.limit(limit),
+      ]
+    );
+
+    return messages;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function sendMessage(roomId: string, content: string, attachments?: { type: string; url: string; name: string }[]) {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) throw Error;
+
+    const newMessage = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.messagesCollectionId,
+      ID.unique(),
+      {
+        roomId,
+        content,
+        sender: currentUser.$id,
+        attachments,
+      }
+    );
+
+    // Update the chat room's lastMessage and updatedAt
+    await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.chatRoomsCollectionId,
+      roomId,
+      {
+        lastMessage: content,
+        lastMessageAt: new Date().toISOString(),
+      }
+    );
+
+    return newMessage;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}

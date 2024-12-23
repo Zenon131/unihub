@@ -90,5 +90,53 @@ export type INavLink = {
     creator?: ICreator;
   }
 
+  export interface IThread {
+    id: string;
+    content: string;
+    author: {
+        id: string;
+        username: string;
+        imageUrl: string;
+    };
+    parentId?: string;
+    communityId: string;
+    createdAt: string;
+    updatedAt: string;
+    likes: string[];
+    replies?: IThread[];
+  }
 
-  
+  export interface ICommunity {
+      id: string;
+      name: string;
+      description: string;
+      imageUrl?: string;
+      creatorId: string;
+      members: string[];
+      threads: IThread[];
+      createdAt: string;
+      updatedAt: string;
+      isPrivate: boolean;
+  }
+
+  export interface IMessage {
+    id: string;
+    content: string;
+    sender: IUser;
+    createdAt: string;
+    attachments?: {
+      type: 'image' | 'file';
+      url: string;
+      name: string;
+    }[];
+  }
+
+  export interface IChatRoom {
+    id: string;
+    name: string;
+    participants: IUser[];
+    lastMessage?: IMessage;
+    unreadCount?: number;
+    createdAt: string;
+    updatedAt: string;
+  }
