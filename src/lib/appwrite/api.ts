@@ -89,7 +89,6 @@ export async function getCurrentUser() {
     try {
         const currentAcc = await account.get();
 
-
         if (!currentAcc) throw new Error("Failed to retrieve current account");
 
         const currentUser = await databases.listDocuments(
@@ -551,5 +550,59 @@ export async function sendMessage(roomId: string, content: string, attachments?:
   } catch (error) {
     console.log(error);
     return null;
+  }
+}
+
+export async function getEvents(){
+  const response = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.eventsCollectionId,
+    [Query.orderDesc('$createdAt'), Query.limit(20)]
+  );
+  
+  if(!response) throw Error;
+
+  const events = response.documents.map((doc) => ({
+    title: doc.title,
+    details: doc.details,
+    userId: doc.userId,
+    date: doc.date,
+    time: doc.time,
+    creator: {
+      id: doc.creator.id,
+      username: doc.creator.username,
+      imageUrl: doc.creator.imageUrl
+    }
+  }));
+
+  return events;
+}
+
+export async function createEvent(event: {
+  title: string;
+  details: string;
+  date: string;
+  time: string;
+  userId: string;
+  creator: {
+    id: string;
+    username: string;
+    imageUrl?: string;
+  };
+}) {
+  try {
+    const newEvent = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.eventsCollectionId,
+      ID.unique(),
+      event
+    );
+
+    if (!newEvent) throw Error;
+
+    return newEvent;
+  } catch (error) {
+    console.error("Error creating event:", error);
+    throw error;
   }
 }

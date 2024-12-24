@@ -6,7 +6,7 @@ import PostCard from '@/components/shared/PostCard'
 import TopicCard from '@/components/shared/TopicCard'
 import { useGetRecentPosts, useGetPopularTopics } from '@/lib/react-query/queriesAndMutations'
 import { Models } from 'appwrite'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { Button } from '@/components/ui/button'
 import {
@@ -28,6 +28,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { locations } from '@/constants/locations'
+import { useLocation } from 'react-router-dom';
 
 const topics = [
   { value: "politics", label: "Politics" },
@@ -41,7 +42,8 @@ const topics = [
   { value: "science", label: "Science" },
   { value: "health", label: "Health" },
   { value: "education", label: "Education" },
-  { value: "business", label: "Business" }
+  { value: "business", label: "Business" },
+  { value: "environment-club", label: "Environment Club" },
 ]
 
 const Home = () => {
@@ -49,46 +51,57 @@ const Home = () => {
   const [selectedLocation, setSelectedLocation] = useState('')
   const [openLocation, setOpenLocation] = useState(false)
   const [openTopic, setOpenTopic] = useState(false)
-  
   const isDesktop = useMediaQuery("(min-width: 768px)")
+
+  // Get topic from URL parameter
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const topicParam = searchParams.get('topic');
+
+  useEffect(() => {
+    if (topicParam) {
+      setSelectedTopic(topicParam);
+    }
+  }, [topicParam]);
+
   const { data: posts, isPending: isPostLoading } = useGetRecentPosts(selectedTopic, selectedLocation)
   const { data: popularTopics, isPending: isTopicLoading } = useGetPopularTopics()
 
-  function LocationList() {
-    return (
-      <Command className="bg-dark-2">
-        <CommandInput placeholder="Search location..." className="bg-dark-2 text-light-1" />
-        <CommandList className="bg-dark-2">
-          <CommandEmpty className="text-light-2">No location found.</CommandEmpty>
-          <CommandGroup className="bg-dark-2">
-            <CommandItem
-              value=""
-              className="text-light-1 hover:bg-dark-4"
-              onSelect={() => {
-                setSelectedLocation('')
-                setOpenLocation(false)
-              }}
-            >
-              All Locations
-            </CommandItem>
-            {locations.map((location) => (
-              <CommandItem
-                key={location.value}
-                value={location.value}
-                className="text-light-1 hover:bg-dark-4"
-                onSelect={(value) => {
-                  setSelectedLocation(value)
-                  setOpenLocation(false)
-                }}
-              >
-                {location.label}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      </Command>
-    )
-  }
+  // function LocationList() {
+  //   return (
+  //     <Command className="bg-dark-2">
+  //       <CommandInput placeholder="Search location..." className="bg-dark-2 text-light-1" />
+  //       <CommandList className="bg-dark-2">
+  //         <CommandEmpty className="text-light-2">No location found.</CommandEmpty>
+  //         <CommandGroup className="bg-dark-2">
+  //           <CommandItem
+  //             value=""
+  //             className="text-light-1 hover:bg-dark-4"
+  //             onSelect={() => {
+  //               setSelectedLocation('')
+  //               setOpenLocation(false)
+  //             }}
+  //           >
+  //             All Locations
+  //           </CommandItem>
+  //           {locations.map((location) => (
+  //             <CommandItem
+  //               key={location.value}
+  //               value={location.value}
+  //               className="text-light-1 hover:bg-dark-4"
+  //               onSelect={(value) => {
+  //                 setSelectedLocation(value)
+  //                 setOpenLocation(false)
+  //               }}
+  //             >
+  //               {location.label}
+  //             </CommandItem>
+  //           ))}
+  //         </CommandGroup>
+  //       </CommandList>
+  //     </Command>
+  //   )
+  // }
 
   function TopicList() {
     return (
@@ -105,7 +118,7 @@ const Home = () => {
                 setOpenTopic(false)
               }}
             >
-              All Topics
+              All Groups
             </CommandItem>
             {topics.map((topic) => (
               <CommandItem
@@ -143,7 +156,7 @@ const Home = () => {
                       <Button variant="outline" className="w-full justify-start shad-input">
                         {selectedTopic ? 
                           topics.find(t => t.value === selectedTopic)?.label 
-                          : "All Topics"}
+                          : "All Groups"}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-[200px] p-0 bg-dark-2" align="start">
@@ -156,7 +169,7 @@ const Home = () => {
                       <Button variant="outline" className="w-full justify-start shad-input">
                         {selectedTopic ? 
                           topics.find(t => t.value === selectedTopic)?.label 
-                          : "All Topics"}
+                          : "All Groups"}
                       </Button>
                     </DrawerTrigger>
                     <DrawerContent className="bg-dark-2">
@@ -168,38 +181,7 @@ const Home = () => {
                 )}
               </div>
 
-              <div className="flex flex-col gap-2 min-w-[200px]">
-                {/* <label className="text-light-2">Change Location</label> */}
-                {isDesktop ? (
-                  <Popover open={openLocation} onOpenChange={setOpenLocation}>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full justify-start shad-input">
-                        {selectedLocation ? 
-                          locations.find(l => l.value === selectedLocation)?.label 
-                          : "All Locations"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0 bg-dark-2" align="start">
-                      <LocationList />
-                    </PopoverContent>
-                  </Popover>
-                ) : (
-                  <Drawer open={openLocation} onOpenChange={setOpenLocation}>
-                    <DrawerTrigger asChild>
-                      <Button variant="outline" className="w-full justify-start shad-input">
-                        {selectedLocation ? 
-                          locations.find(l => l.value === selectedLocation)?.label 
-                          : "All Locations"}
-                      </Button>
-                    </DrawerTrigger>
-                    <DrawerContent className="bg-dark-2">
-                      <div className="mt-4 border-t">
-                        <LocationList />
-                      </div>
-                    </DrawerContent>
-                  </Drawer>
-                )}
-              </div>
+            
             </div>
           </div>
 
@@ -217,8 +199,8 @@ const Home = () => {
       <FAB destination={'/create-post'} />
       <div className="home-creators">
         <div className='flex gap-2'>
-          <h3 className="h3-bold text-light-1">Hot Topics</h3>
-          <img src='/assets/icons/!.svg' alt='popular' height={36} width={36}/>
+          <h3 className="h3-bold text-light-1">Popular Groups</h3>
+          {/* <img src='/assets/icons/!.svg' alt='popular' height={36} width={36}/> */}
         </div>
         {isTopicLoading && !popularTopics ? (
           <Loader />

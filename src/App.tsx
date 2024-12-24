@@ -1,13 +1,17 @@
 import { Routes, Route} from 'react-router-dom'
 import './globals.css'
 import LoginForm from './_auth/forms/LoginForm'
-import { CreatePost, Explore, Home, Profile, UpdateProfile } from './_root/pages'
+import { Community, CreateCommunity, CreatePost, Explore, Home, Profile, UpdateProfile } from './_root/pages'
 import RegForm from './_auth/forms/RegForm'
 import AuthLayout from './_auth/AuthLayout'
 import RootLayout from './_root/RootLayout'
 import { Toaster } from './components/ui/toaster'
 import PostDetails from './_root/pages/PostDetails'
 import Vibes from './_root/pages/Harmony'
+import Communities from './_root/pages/Communities'
+import Chats from './_root/pages/Chats'
+import ChatRoom from './_root/pages/ChatRoom'
+import Events from './_root/pages/Events'
 
 
 
@@ -27,13 +31,17 @@ function App() {
         <Route element={<RootLayout />}>
             <Route index element={<Home />} />
             <Route path="/explore" element={<Explore />} />
-            {/* <Route path="/create-community" element={<CreateCommunity />} /> */}
+            <Route path="/create-community" element={<CreateCommunity />} />
             <Route path="/create-post" element={<CreatePost />} />
-            {/* <Route path="/community/:id" element={<Community />} /> */}
+            <Route path="/community/:id" element={<Community />} />
             <Route path="/post/:id" element={<PostDetails />} />
             <Route path="/profile/:id/*" element={<Profile />} />
             <Route path="/update-profile/:id/" element={<UpdateProfile />} />
             <Route path="/harmony" element={<Vibes />} />
+            <Route path="/communities" element={<Communities />} />
+            <Route path="/chats" element={<Chats />} />
+            <Route path="/chat/:id" element={<ChatRoom />} />
+            <Route path="/events" element={<Events />} />
         </Route>
         
         {/* Catch-all route for handling 404 errors */}

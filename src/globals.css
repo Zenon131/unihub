@@ -143,6 +143,10 @@
     @apply max-w-screen-sm flex flex-col items-center w-full gap-6 md:gap-9;
   }
 
+  .home-posts ul {
+    @apply flex flex-col-reverse flex-1 gap-9 w-full;
+  }
+
   .home-creators {
     @apply hidden xl:flex flex-col w-72 2xl:w-465 px-6 py-10 gap-10  overflow-scroll custom-scrollbar;
   }
@@ -276,7 +280,7 @@
 
   /* Button */
   .shad-button_primary {
-    @apply bg-primary-500 hover:bg-primary-500 text-light-1 flex gap-2 !important;
+    @apply bg-[#1B4D3E] hover:bg-[#1B4D3E] text-light-1 flex gap-2 !important;
   }
 
   .shad-button_dark_4 {

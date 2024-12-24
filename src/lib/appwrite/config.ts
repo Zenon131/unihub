@@ -12,6 +12,7 @@ export const appwriteConfig = {
     commentCollectionId: import.meta.env.VITE_APPWRITE_COMMENTS_COLL_ID, // Comments collection ID
     chatRoomsCollectionId: import.meta.env.VITE_APPWRITE_CHAT_ROOMS_COLL_ID, // Chat rooms collection ID
     messagesCollectionId: import.meta.env.VITE_APPWRITE_MESSAGES_COLL_ID, // Messages collection ID
+    eventsCollectionId: import.meta.env.VITE_APPWRITE_EVENTS_COLL_ID, // Events collection ID
 }
 
 // Initialize Appwrite client

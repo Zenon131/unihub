@@ -45,8 +45,11 @@ const PostCard = ({ post }: PostCardProps) => {
               <p className="subtle-semibold lg:small-regular">
                 {multiFormatDateString(post.$createdAt)}
               </p>
-              <Badge variant='outline' className="subtle-semibold lg:small-regular">
+              {/* <Badge variant='outline' className="subtle-semibold lg:small-regular">
                 {post?.location}
+              </Badge> */}
+              <Badge variant='outline' className="subtle-semibold lg:small-regular">
+                {post?.topic}
               </Badge>
             </div>
           </div>
@@ -58,10 +61,7 @@ const PostCard = ({ post }: PostCardProps) => {
         <p className="small-medium lg:base-medium py-5">
           {post?.content}
         </p>
-        
-        <p className="flex gap-1 mt-2 text-light-3">
-          Topic: {post.topic}!
-        </p>
+
       </Link>
       {!post.parentId && (
           <div className="mt-2 text-light-3">

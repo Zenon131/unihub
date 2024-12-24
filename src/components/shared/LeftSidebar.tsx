@@ -35,13 +35,13 @@ const LeftSidebar = () => {
         <nav className='leftsidebar'>
             <div className='flex flex-col gap-11'>
                 <Link to='/' className='flex gap-3 items-center' title='Go to Home'>
-                    <img src='/assets/images/bashmnt2.svg' alt='Bashmnt Logo' width={150} height={36}/>
+                    <img src='/assets/images/unihub.svg' alt='Unihub Logo' width={150} height={36}/>
                 </Link>
                 <ul className='flex flex-col gap-6'>
                     {sidebarLinks.map((link: INavLink) => {
                         const isActive = pathname === link.route
                         return (
-                            <li key={link.label} className={`leftsidebar-link ${isActive && 'bg-primary-500'}`}>
+                            <li key={link.label} className={`leftsidebar-link ${isActive && 'bg-[#1B4D3E]'}`}>
                                 <NavLink to={link.route} className='flex gap-4 items-center p-6'>
                                     <img src={link.imgURL} className='invert' alt={link.label} width={24} height={24}/>
                                     {link.label}

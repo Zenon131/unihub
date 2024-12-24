@@ -1,13 +1,13 @@
 export const sidebarLinks = [
     {
-      imgURL: "/assets/icons/house (1).svg",
+      imgURL: "/assets/icons/homeuni.svg",
       route: "/",
       label: "Home",
     },
     {
-      imgURL: "/assets/icons/compass.svg",
+      imgURL: "/assets/icons/searchuni.svg",
       route: "/explore",
-      label: "Explore",
+      label: "Search",
     },
     // {
     //   imgURL: "/assets/icons/people.svg",
@@ -19,38 +19,58 @@ export const sidebarLinks = [
     //   route: "/create-community",
     //   label: "Create Community",
     // },
+    // {
+    //   imgURL: "/assets/icons/stars.svg",
+    //   route: "/harmony",
+    //   label: "Harmony",
+    // },
     {
-      imgURL: "/assets/icons/stars.svg",
-      route: "/harmony",
-      label: "Harmony",
-    },
-    {
-      imgURL: "/assets/icons/pencil-square.svg",
+      imgURL: "/assets/icons/createuni.svg",
       route: "/create-post",
       label: "Create Post",
+    },
+    {
+      imgURL: "/assets/icons/groupsuni.svg",
+      route: "/communities",
+      label: "Communities",
+    },
+    {
+      imgURL: "/assets/icons/eventsuni.svg",
+      route: "/events",
+      label: "Events",
     },
   ];
   
   export const bottombarLinks = [
     {
-      imgURL: "/assets/icons/house (1).svg",
+      imgURL: "/assets/icons/homeuni.svg",
       route: "/",
       label: "Home",
     },
     {
-      imgURL: "/assets/icons/plus-lg.svg",
+      imgURL: "/assets/icons/eventsuni.svg",
+      route: "/events",
+      label: "Events",
+    },
+    {
+      imgURL: "/assets/icons/createuni.svg",
       route: "/create-post",
       label: "Create Post",
     },
     {
-      imgURL: "/assets/icons/compass.svg",
+      imgURL: "/assets/icons/searchuni.svg",
       route: "/explore",
-      label: "Explore",
+      label: "Search",
     },
+    // {
+    //   imgURL: "/assets/icons/stars.svg",
+    //   route: "/harmony",
+    //   label: "Harmony",
+    // },
     {
-      imgURL: "/assets/icons/stars.svg",
-      route: "/harmony",
-      label: "Harmony",
+      imgURL: "/assets/icons/groupsuni.svg",
+      route: "/communities",
+      label: "Communities",
     },
     // {
     //   imgURL: "/assets/icons/diagram-2-fill.svg",

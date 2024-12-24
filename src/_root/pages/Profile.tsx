@@ -40,13 +40,13 @@ type FrequentTopicsProps = {
 const FrequentTopics: React.FC<FrequentTopicsProps> = ({ posts }) => {
   const topicCounts = useMemo(() => {
     const counts: Record<string, number> = Object.create(null);
-    
+
     posts.forEach((post) => {
       if (post.topic) {
         counts[post.topic] = (counts[post.topic] || 0) + 1;
       }
     });
-    
+
     // Sort topics by their frequency in descending order
     return Object.entries(counts).sort((a, b) => b[1] - a[1]);
   }, [posts]);
@@ -62,7 +62,7 @@ const FrequentTopics: React.FC<FrequentTopicsProps> = ({ posts }) => {
           ))}
         </ul>
       ) : (
-        <p>No topics found.</p>
+        <p>No groups found.</p>
       )}
     </div>
   );
@@ -152,7 +152,20 @@ const Profile = () => {
                   Edit Profile
                 </p>
               </Link>
-            ) : null}
+            ) : (
+              <div className="flex gap-3">
+                <Link
+                  to={`/chat/${currentUser.$id}`}
+                  className="h-12 bg-dark-4 px-5 text-light-1 flex-center gap-2 rounded-lg hover:bg-dark-3"
+                >
+                  <img
+                    src={"/assets/icons/chat-dots-fill.svg"}
+                    alt="chat"
+                    className="invert"
+                  />
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -164,13 +177,13 @@ const Profile = () => {
             pathname === `/profile/${id}` && "!bg-dark-3"
           }`}
         >
-          <img
+          {/* <img
             src="/assets/icons/postcard.svg"
             alt="posts"
             width={20}
             height={20}
             className="invert"
-          />
+          /> */}
           Posts
         </Link>
         <Link
@@ -179,13 +192,13 @@ const Profile = () => {
             pathname === `/profile/${id}/topics` && "!bg-dark-3"
           }`}
         >
-          <img
-            src="/assets/icons/!.svg"
+          {/* <img
+            src="/assets/icons/people-fill (1).svg"
             alt="topics"
             width={20}
             height={20}
-          />
-          Frequent Topics
+          /> */}
+          Groups
         </Link>
       </div>
 

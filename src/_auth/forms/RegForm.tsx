@@ -65,7 +65,7 @@ function RegForm() {
   return (
     <Form {...form}>
       <div className='sm:w-420 flex-center flex-col'>
-        <img alt='bashmnt-login' src='/assets/images/bashmnt.svg'/>
+        <img alt='unihub-login' src='/assets/images/unihub.svg'/>
         <h2 className='h3-bold md:h2-bold pt-2 sm:pt-6'>Register</h2>
         <p className='text-light-3 small-medium md:base-regular mt-2'>Who are you?</p>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full mt-4">
