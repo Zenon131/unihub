@@ -32,7 +32,7 @@ export const sidebarLinks = [
     {
       imgURL: "/assets/icons/groupsuni.svg",
       route: "/communities",
-      label: "Communities",
+      label: "Groups",
     },
     {
       imgURL: "/assets/icons/eventsuni.svg",
@@ -70,7 +70,7 @@ export const sidebarLinks = [
     {
       imgURL: "/assets/icons/groupsuni.svg",
       route: "/communities",
-      label: "Communities",
+      label: "Groups",
     },
     // {
     //   imgURL: "/assets/icons/diagram-2-fill.svg",

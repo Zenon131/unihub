@@ -140,3 +140,27 @@ export type INavLink = {
     createdAt: string;
     updatedAt: string;
   }
+
+  export interface INewEvent {
+    title: string;
+    details: string;
+    userId: string;
+    date: string;
+    time: string;
+    creator: string;
+  };
+
+  export interface IEvent {
+    $id: string;
+    $collectionId: string;
+    $databaseId: string;
+    $createdAt: string;
+    $updatedAt: string;
+    $permissions: string[];
+    title: string;
+    details: string;
+    date: string;
+    time: string;
+    userId: string;
+    creator?: ICreator;
+  };

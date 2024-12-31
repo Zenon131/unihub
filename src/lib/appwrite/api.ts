@@ -1,4 +1,4 @@
-import { INewComment, INewPost, INewUser, IUpdateUser } from "@/types";
+import { INewComment, INewPost, INewUser, IUpdateUser, INewEvent } from "@/types";
 import { ID, Query } from 'appwrite';
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 
@@ -563,46 +563,71 @@ export async function getEvents(){
   if(!response) throw Error;
 
   const events = response.documents.map((doc) => ({
+    $id: doc.$id,
+    $collectionId: doc.$collectionId,
+    $databaseId: doc.$databaseId,
+    $createdAt: doc.$createdAt,
+    $updatedAt: doc.$updatedAt,
+    $permissions: doc.$permissions,
     title: doc.title,
     details: doc.details,
     userId: doc.userId,
     date: doc.date,
     time: doc.time,
-    creator: {
-      id: doc.creator.id,
-      username: doc.creator.username,
-      imageUrl: doc.creator.imageUrl
-    }
+    creator: doc.creator
   }));
 
   return events;
 }
 
-export async function createEvent(event: {
-  title: string;
-  details: string;
-  date: string;
-  time: string;
-  userId: string;
-  creator: {
-    id: string;
-    username: string;
-    imageUrl?: string;
-  };
-}) {
+export async function createEvent(event: INewEvent) {
+//   title: string;
+//   details: string;
+//   date: string;
+//   time: string;
+//   userId: string;
+//   creator: string;
+// }) {
+//   try {
+//     const newEvent = await databases.createDocument(
+//       appwriteConfig.databaseId,
+//       appwriteConfig.eventsCollectionId,
+//       ID.unique(),
+//       event
+//     );
+
+//     if (!newEvent) throw Error;
+
+//     return newEvent;
+//   } catch (error) {
+//     console.error("Error creating event:", error);
+//     throw error;
+//   }
+
+
   try {
     const newEvent = await databases.createDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.eventsCollectionId,
-      ID.unique(),
-      event
+        appwriteConfig.databaseId,
+        appwriteConfig.eventsCollectionId,
+        ID.unique(),
+        { 
+            title: event.title,
+            creator: event.userId, // Ensure this matches the relationship field in your schema
+            userId: event.userId,
+            details: event.details,
+            date: event.date,
+            time: event.time,
+        }
     );
 
-    if (!newEvent) throw Error;
 
     return newEvent;
-  } catch (error) {
-    console.error("Error creating event:", error);
-    throw error;
+  } catch (err: any) {
+    if (err.message.includes("Invalid document structure")) {
+        console.error("Error: Missing required fields in the event data", err);
+    } else {
+        console.error("Error creating event:", err);
+    }
+    return null;
   }
 }

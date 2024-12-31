@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Event } from "@/types/event";
+import { IEvent } from "@/types/index";
 import EventCard from "@/components/shared/EventCard";
 import { getEvents } from "@/lib/appwrite/api";
 import Loader from "@/components/shared/Loader";
@@ -15,7 +15,7 @@ import {
 import EventForm from "@/components/forms/EventForm";
 
 const Events = () => {
-    const [events, setEvents] = useState<Event[]>([]);
+    const [events, setEvents] = useState<IEvent[]>([]);
     const [loading, setLoading] = useState(true);
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
@@ -43,7 +43,9 @@ const Events = () => {
                     <h2 className="text-3xl font-bold text-light-1">Upcoming Events</h2>
                     <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                         <DialogTrigger asChild>
-                            <Button>Create Event</Button>
+                            <Button className="bg-primary-500">
+                                <img src="/assets/icons/createuni.svg" alt="plus" className="w-8 h-8 invert" />
+                            </Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[500px]">
                             <DialogHeader>

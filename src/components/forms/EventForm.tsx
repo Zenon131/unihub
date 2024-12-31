@@ -55,6 +55,7 @@ const EventForm = () => {
       title: "",
       details: "",
       time: "",
+      date: undefined,
     },
   })
 
@@ -66,11 +67,7 @@ const EventForm = () => {
         date: format(values.date, "yyyy-MM-dd"),
         time: values.time,
         userId: user.id,
-        creator: {
-          id: user.id,
-          username: user.username,
-          imageUrl: user.imgurl || "",
-        },
+        creator: user.id,
       };
 
       await createEvent(eventData);
@@ -162,16 +159,21 @@ const EventForm = () => {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 bg-dark-4 border-light-3" align="start">
+                  <PopoverContent className="w-auto p-0 bg-dark-4 border-light-3 z-[9999] relative" align="start">
                     <Calendar
                       mode="single"
                       selected={field.value}
-                      onSelect={field.onChange}
+                      onSelect={(date: Date | undefined) => {
+                        field.onChange(date);
+                        form.clearErrors("date");
+                      }}
                       disabled={(date) =>
                         date < new Date(new Date().setHours(0, 0, 0, 0))
                       }
                       initialFocus
-                      className="bg-dark-4 text-light-1"
+                      className="bg-dark-4 text-light-1 rounded-lg pointer-events-auto [&_.rdp-day_focus]:bg-primary-500 [&_.rdp-day_today]:border-2 [&_.rdp-day_today]:border-primary-500"
+                      fromDate={new Date()}
+                      today={new Date()}
                     />
                   </PopoverContent>
                 </Popover>
